@@ -1,0 +1,5 @@
+outs:
+- md5: edc0aa073221c9c511d5e88d11b4ad8d
+  size: 894188
+  hash: md5
+  path: fake_news_dataset.csv
