@@ -1,0 +1,5 @@
+outs:
+- md5: e5cd21976ce55f73706b5fd96289bf9b
+  size: 7127883
+  hash: md5
+  path: fake_news_classifier.joblib
