@@ -14,7 +14,7 @@ import os
 
 # --------------------------------------------
 # 1. dataset
-df = pd.read_csv("fake_news_dataset_modified.csv") 
+df = pd.read_csv("data/fake_news_dataset_modified.csv") 
 # --------------------------------------------
 # PREPROCESSING
 # --------------------------------------------
