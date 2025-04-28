@@ -1,12 +1,17 @@
 Proyecto Final "# Fake News Detector" 
 
-Integrantes:
+---
 
-Gloria Mata Curling
-Ana Maria Ramirez Campabadal
-Reychell Segura Fernandez
+## Integrantes del equipo
 
-Todos los integrantes figuran como **colaboradores** en este repositorio.
+- Reychell Segura Fernández
+- Ana María Ramírez Campabadal
+- Gloria Mata Curling
+
+Todos los integrantes figuran como **colaboradores** del repositorio.
+
+---
+
 
 
 # Fake News Detector - MLOps Project
@@ -15,24 +20,32 @@ Todos los integrantes figuran como **colaboradores** en este repositorio.
 Este proyecto implementa un sistema de detección de noticias falsas utilizando un modelo de Machine Learning. Se desarrolló siguiendo prácticas de MLOps para asegurar la automatización, versionamiento y despliegue continuo del modelo y la API.
 
 El sistema incluye:
-- **Entrenamiento y reentrenamiento automatizado del modelo**
-- **Versionamiento de datos y modelo usando DVC**
-- **Despliegue de una API REST (FastAPI) para hacer inferencias**
-- **Contenedores Docker para ejecutar el sistema**
-- **Integración y entrega continua con GitHub Actions**
-- **Interfaz gráfica o API de predicción**
+- Entrenamiento y reentrenamiento automatizado del modelo (`retrain.py`)
+- Versionamiento de datos y modelos usando DVC
+- Despliegue de una API REST utilizando **FastAPI**
+- Contenedores Docker (`Dockerfile`, `docker-compose.yml`) para ejecución
+- Integración continua con **GitHub Actions**
 
 ---
-
 ## Branches utilizados
-
-Durante el desarrollo del proyecto, se utilizaron las siguientes ramas:
 
 - `main`
 - `develop`
 - `staging`
 
-Todas las ramas utilizadas en el proceso de desarrollo han sido mantenidas y no eliminadas.
+**Todas las ramas han sido conservadas** durante el proceso.
+
+---
+
+## Estructura principal del proyecto
+
+- `main.py`: Archivo principal para ejecutar la API con FastAPI
+- `retrain.py`: Script para reentrenar el modelo de noticias falsas
+- `fake_news_classifier.joblib`: Modelo entrenado
+- `models/`: Carpeta de utilitarios relacionados al modelo
+- `app/`: Módulos de la API
+- `download_fake_news.py`: Script para descarga de datos
+- `fake_news_dataset_modified.csv`: Dataset modificado de noticias falsas
 
 ---
 
@@ -40,52 +53,50 @@ Todas las ramas utilizadas en el proceso de desarrollo han sido mantenidas y no 
 
 ### Requerimientos
 - Python 3.8 o superior
-- Docker
+- Docker (opcional)
 - DVC
 - Git
-- AWS CLI configurado (opcional para DVC remote en la nube)
+- AWS CLI (opcional)
 
 ### Clonar el repositorio
-```
+```bash
 git clone https://github.com/Rey0254/fake-news-detector-mlops.git
 cd fake-news-detector-mlops
 ```
 
 ### Instalar dependencias
-```
+```bash
 pip install -r requirements.txt
 ```
 
-### Inicializar DVC
-```
+### Inicializar DVC y descargar datos
+```bash
 dvc pull
 ```
-*(Esto descarga los datos versionados del almacenamiento remoto configurado.)*
 
 ### Ejecutar la API localmente
+```bash
+uvicorn main:app --reload
 ```
-uvicorn app.main:app --reload
-```
-Esto levanta la API en `http://127.0.0.1:8000`
+La API estará disponible en: `http://127.0.0.1:8000`
 
 ---
 
 ## Documentación del modelo y API
 
 ### Inputs del modelo
-- **Texto de noticia** (`string`): El texto completo o fragmento de la noticia a evaluar.
+- **text** (`string`): Texto de una noticia que se desea clasificar.
 
 ### Outputs del modelo
-- **Clasificación** (`string`): Retorna `"FAKE"` o `"REAL"` dependiendo de la predicción del modelo.
+- **prediction** (`string`): Resultado `"FAKE"` o `"REAL"`.
 
-### Endpoints principales de la API
+### Endpoints principales
 
 - `POST /predict`
-  - **Descripción**: Permite enviar un texto de noticia para clasificarlo como `FAKE` o `REAL`.
-  - **Body de entrada (JSON)**:
+  - **Request body**:
     ```json
     {
-      "text": "Aquí va el texto de la noticia"
+      "text": "Texto de la noticia a clasificar"
     }
     ```
   - **Respuesta**:
@@ -96,39 +107,42 @@ Esto levanta la API en `http://127.0.0.1:8000`
     ```
 
 - `GET /`
-  - **Descripción**: Endpoint raíz que verifica que la API esté en funcionamiento.
- 
-  - ### Si se usa Interfaz Gráfica (ej. Streamlit)
-
-- Para correr la interfaz:
-  ```bash
-  streamlit run app/streamlit_app.py
-  ```
-- Inputs:
-  - Un campo de texto donde se pega la noticia.
-- Outputs:
-  - Un resultado visual indicando si la noticia es `FAKE` o `REAL`.
+  - Verifica que el servidor API esté activo.
 
 ---
 
-## Ejecución con Docker
+## Ejecución usando Docker
 
-**Construir la imagen Docker:**
+### Build de la imagen Docker
 ```bash
 docker build -t fake-news-detector .
 ```
 
-**Correr el contenedor:**
+### Correr el contenedor
 ```bash
 docker run -p 8000:8000 fake-news-detector
 ```
 
-La API estará disponible en `http://localhost:8000`.
+Acceso a la API en: `http://localhost:8000`
+
+### También puedes usar docker-compose
+```bash
+docker-compose up
+```
+
+---
+
+## Reentrenar el modelo
+Para reentrenar el modelo utilizando nuevos datos:
+```bash
+python retrain.py
+```
+Esto actualizará `fake_news_classifier.joblib`.
 
 ---
 
 ## Flujo de CI/CD
 
-- **Linting** y **testing automático** mediante **GitHub Actions** al hacer push a `develop`, `staging` o `main`.
-- **Despliegue** usando contenedores Docker.
-- **Control de versiones de datos y modelos** usando **DVC** conectado a almacenamiento remoto.
+- **GitHub Actions** ejecuta pruebas automáticas, linting y chequeos de formato.
+- **Docker** para contenerización de la API.
+- **DVC** para versionamiento de datasets y modelo.
